@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: kv-to-kube
+  namespace: kv-to-kube
+spec:
+  schedule: "*/15 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          annotations:
+            kubectl.kubernetes.io/default-container: app
+          labels:
+            azure.workload.identity/use: "true"
+        spec:
+          containers:
+          - name: app
+            image: ghcr.io/cpressland/kv-to-kube:latest
+            imagePullPolicy: Always
+            command:
+            - kv-to-kube
+            - --keyvault-name=my_keyvault
+            - --excluded-namespaces=default,kube-system
+          restartPolicy: Never

@@ -1,0 +1,19 @@
+resources:
+  - deploy
+
+patches:
+  - target:
+      kind: CronJob
+    patch: |
+      - op: replace
+        path: /spec/jobTemplate/spec/template/spec/containers/0/command
+        value:
+        - kv-to-kube
+        - --keyvault-name=my-awesome-keyvault
+        - --excluded-namespaces=kube-system
+  - target:
+      kind: ServiceAccount
+    patch: |
+      - op: replace
+        path: /metadata/annotations/azure.workload.identity~1client-id
+        value: abcdefhi-0000-0000-0000-000000000000
