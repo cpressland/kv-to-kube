@@ -5,7 +5,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: kv-to-kube
-    namespace: kube-system
+    namespace: kv-to-kube
 roleRef:
   kind: ClusterRole
   name: kv-to-kube
