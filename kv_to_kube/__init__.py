@@ -12,27 +12,6 @@ from loguru import logger
 from pydantic import BaseModel, ValidationError
 
 
-@click.command()
-@click.option(
-    "--keyvault-name",
-    type=str,
-    help="Name of the Azure Key Vault",
-    required=True,
-)
-@click.option(
-    "--excluded-namespaces",
-    type=str,
-    help="Namespaces to exclude",
-    required=False,
-    show_default=True,
-    default="kv-to-kube,kube-system",
-)
-def cli(keyvault_name: str, excluded_namespaces: str) -> None:
-    """kv-to-kube main command."""
-    KVToKube(keyvault_name, excluded_namespaces.split(",")).run()
-
-cli(max_content_width=256)
-
 class KVToKubeSecret(BaseModel):
     """Object for Syncing with Kubernetes."""
 
@@ -106,3 +85,24 @@ class KVToKube:
         for namespace in namespaces:
             for secret in secrets.values():
                 self.create_or_update_secret(namespace, secret)
+
+@click.command()
+@click.option(
+    "--keyvault-name",
+    type=str,
+    help="Name of the Azure Key Vault",
+    required=True,
+)
+@click.option(
+    "--excluded-namespaces",
+    type=str,
+    help="Namespaces to exclude",
+    required=False,
+    show_default=True,
+    default="kv-to-kube,kube-system",
+)
+def cli(keyvault_name: str, excluded_namespaces: str) -> None:
+    """kv-to-kube main command."""
+    KVToKube(keyvault_name, excluded_namespaces.split(",")).run()
+
+cli(max_content_width=256)
