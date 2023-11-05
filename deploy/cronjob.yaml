@@ -23,3 +23,4 @@ spec:
             - --keyvault-name=my_keyvault
             - --excluded-namespaces=default,kube-system
           restartPolicy: Never
+          serviceAccountName: kv-to-kube
